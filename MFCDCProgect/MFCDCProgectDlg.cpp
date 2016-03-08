@@ -53,6 +53,7 @@ CMFCDCProgectDlg::CMFCDCProgectDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_MFCDCPROGECT_DIALOG, pParent)
 	, Maze_Length(0)
 	, Maze_Width(0)
+	, Message(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -62,6 +63,7 @@ void CMFCDCProgectDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, Maze_Length);
 	DDX_Text(pDX, IDC_EDIT2, Maze_Width);
+	DDX_Text(pDX, IDC_EDIT3, Message);
 }
 
 BEGIN_MESSAGE_MAP(CMFCDCProgectDlg, CDialogEx)
@@ -163,14 +165,27 @@ HCURSOR CMFCDCProgectDlg::OnQueryDragIcon()
 void CMFCDCProgectDlg::OnBnClickedButton1()
 {
 	// TODO: 在此添加控件通知处理程序代码
+
+	
+	
 	UpdateData(TRUE);
 	CWnd *pWnd = GetDlgItem(Maze_Show);
+	CEdit *write = (CEdit*)GetDlgItem(IDC_EDIT3);
+	write->SetWindowTextW(_T("迷宫生成中，请等待"));
+	//Message = "迷宫生成中，请等待";
+	//UpdateData(FALSE);
 
+	CDC *wall = pWnd->GetDC();
+	CBrush brush(RGB(255,255,255));
+	wall->SelectObject(brush);
+	CRect rect;
+	pWnd->GetClientRect(&rect);
+	wall->Rectangle(rect);
 
 	delete m;
 	m = new MazeProject(Maze_Width, Maze_Length, pWnd);
 	m->MazeCreat();
-
+	write->SetWindowTextW(_T("迷宫生成完成!"));
 	//Message = "迷宫生成完成!";
 	//UpdateData(FALSE);
 }
@@ -181,6 +196,8 @@ void CMFCDCProgectDlg::OnBnClickedButton2()
 	// TODO: 在此添加控件通知处理程序代码
 	CWnd *pWnd = GetDlgItem(Maze_Show);
 	m->PathFind(pWnd);
-	//Message = "迷宫完成!";
-	//UpdateData(FALSE);
+	Message = "寻路完成!";
+	UpdateData(FALSE);
 }
+
+

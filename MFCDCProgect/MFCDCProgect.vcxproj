@@ -194,6 +194,7 @@
     <ClInclude Include="MFCDCProgect.h" />
     <ClInclude Include="MFCDCProgectDlg.h" />
     <ClInclude Include="PathFind.h" />
+    <ClInclude Include="projectcreat.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />

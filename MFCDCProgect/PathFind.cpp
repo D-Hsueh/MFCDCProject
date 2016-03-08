@@ -82,6 +82,7 @@ bool MazeProject::PathFind(CWnd *pWnd)
 		if (maze[NowLocationX][NowLocationY + 1] == End_Location)
 		{
 			maze[NowLocationX][NowLocationY] = Load_NotSure;
+			DrawInFind(NowLocationX, NowLocationY);
 			break;
 		}
 		
@@ -107,6 +108,7 @@ bool MazeProject::PathFind(CWnd *pWnd)
 		if (maze[EastX][EastY] == Load_NotArrive)
 		{
 			maze[NowLocationX][NowLocationY] = Load_NotSure;
+			DrawInFind(NowLocationX, NowLocationY);
 			NowLocationX = EastX;
 			NowLocationY = EastY;
 			loc *step = new loc();
@@ -118,6 +120,7 @@ bool MazeProject::PathFind(CWnd *pWnd)
 		else if (maze[SouthX][SouthY] == Load_NotArrive)
 		{
 			maze[NowLocationX][NowLocationY] = Load_NotSure;
+			DrawInFind(NowLocationX, NowLocationY);
 			NowLocationX = SouthX;
 			NowLocationY = SouthY;
 			loc *step = new loc();
@@ -129,6 +132,7 @@ bool MazeProject::PathFind(CWnd *pWnd)
 		else if (maze[WestX][WestY] == Load_NotArrive)
 		{
 			maze[NowLocationX][NowLocationY] = Load_NotSure;
+			DrawInFind(NowLocationX, NowLocationY);
 			NowLocationX = WestX;
 			NowLocationY = WestY;
 			loc *step = new loc();
@@ -140,6 +144,7 @@ bool MazeProject::PathFind(CWnd *pWnd)
 		else if (maze[NorthX][NorthY] == Load_NotArrive)
 		{
 			maze[NowLocationX][NowLocationY] = Load_NotSure;
+			DrawInFind(NowLocationX, NowLocationY);
 			NowLocationX = NorthX;
 			NowLocationY = NorthY;
 			loc *step = new loc();
@@ -151,6 +156,7 @@ bool MazeProject::PathFind(CWnd *pWnd)
 		else
 		{
 			maze[NowLocationX][NowLocationY] = Load_ArriveButFalse;
+			DrawInFind(NowLocationX, NowLocationY);
 			load.pop();
 			loc *step = new loc();
 			step = load.top();
@@ -158,7 +164,7 @@ bool MazeProject::PathFind(CWnd *pWnd)
 			NowLocationY = step->y;
 		}
 		
-		DrawInFind(pWnd);
+		//DrawInFind();
 	
 	}
 	//查询结束，对路径进行重置
@@ -177,13 +183,52 @@ bool MazeProject::PathFind(CWnd *pWnd)
 		int tempX = temp->x;
 		int tempY = temp->y;
 		maze[tempX][tempY] = Load_ArriveAndTrue;
-		DrawInFind(pWnd);
+		DrawInFind(tempX, tempY);
 		FinalLoad.pop();
 	}
 	return true;
 }
 
-void MazeProject::DrawInFind(CWnd *pWnd)
+void MazeProject::DrawInFind(int i,int j)
+{
+	int length = size_length;
+	int width = size_width;
+
+	//计算边长
+	int bianchang = rect.Width() / width;
+	int chushiweizhi = (rect.Width() - bianchang*width) / 2;
+			CRect recttemp(chushiweizhi + j * bianchang, chushiweizhi + i * bianchang, chushiweizhi + j * bianchang + bianchang, chushiweizhi + i * bianchang + bianchang);
+			if (maze[i][j] == Load_NotArrive)
+			{
+				pdc_Load->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == Wall)
+			{
+				pdc_Wall->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == Load_ArriveAndTrue)
+			{
+				pdc_Load_True->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == Load_ArriveButFalse)
+			{
+				pdc_Load_False->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == Start_Location)
+			{
+				pdc_Start->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == End_Location)
+			{
+				pdc_End->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == Load_NotSure)
+			{
+				pdc_Load_Not_Sure->Rectangle(&recttemp);
+			}
+	Sleep(3);
+}
+void MazeProject::DrawInFind()
 {
 	//画出路径
 	/*
@@ -286,5 +331,5 @@ void MazeProject::DrawInFind(CWnd *pWnd)
 			}
 		}
 	}
-	Sleep(10);
+	//Sleep(100);
 }

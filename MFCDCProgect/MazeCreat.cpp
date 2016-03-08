@@ -52,6 +52,7 @@ bool MazeProject::MazeCreat()
 	{
 		p[i] = i;
 	}
+	DrawInCreat();
 	//将所有的墙存进去
 	list *l = new list();
 
@@ -105,17 +106,19 @@ bool MazeProject::MazeCreat()
 			if (y - x == 1)
 			{
 				maze[lo_x][lo_y + 1] = 0;
+				DrawInCreat(lo_x,lo_y+1);
 			}
 			else if (y - x == maze_length)
 			{
 				maze[lo_x + 1][lo_y] = 0;
+				DrawInCreat(lo_x+1,lo_y);
 			}
 			else
 			{
 				BugPrint("Error:Destory the wall is fail by MazeCreat");
 			}
 			l->del(ran);
-			DrawInCreat();
+			//DrawInCreat();
 			//Sleep(50);
 		}
 		else
@@ -126,6 +129,33 @@ bool MazeProject::MazeCreat()
 	}
 		
 	return true;
+}
+void MazeProject::DrawInCreat(int i,int j)
+{
+	int length = size_length;
+	int width = size_width;
+
+	//计算边长
+	int bianchang = rect.Width() / width;
+	int chushiweizhi = (rect.Width() - bianchang*width) / 2;
+			CRect recttemp(chushiweizhi + j * bianchang, chushiweizhi + i * bianchang, chushiweizhi + j * bianchang + bianchang, chushiweizhi + i * bianchang + bianchang);
+			if (maze[i][j] == Load_NotArrive)
+			{
+				pdc_Load->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == Wall)
+			{
+				pdc_Wall->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == Start_Location)
+			{
+				pdc_Start->Rectangle(&recttemp);
+			}
+			else if (maze[i][j] == End_Location)
+			{
+				pdc_End->Rectangle(&recttemp);
+			}
+			Sleep(1);
 }
 
 void MazeProject::DrawInCreat()
@@ -198,6 +228,8 @@ void MazeProject::DrawInCreat()
 			}
 		}
 	}
+
+
 	//Sleep(50);
 
 }
